@@ -14,7 +14,7 @@
   },
   "scripts": {
     "build-js": "browserify -t [ babelify --preset [ es2015 ] ] index.js > app.js",
-    "style": "stylus --use nib --watch src/client/lib/style.styl --out public/style.css",
+    "stylus": "stylus --use nib --watch src/client/lib/style.styl --out public/style.css",
     "jade": "jade --watch --pretty src/client/lib/index.jade --out public",
     "serve": "serve public"
   }
