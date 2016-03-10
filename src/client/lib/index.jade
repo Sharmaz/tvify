@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+html(lang="en")
+head
+	meta(charset="UTF-8")
+	title TVify
+	link(rel="stylesheet", href="https://fonts.googleapis.com/css?family=Roboto")
+	link(rel="stylesheet", href="style.css")
+body
+	#app-container
+		header#app-header
+			h1 TVify
+		section#app-body
+			form.search-form
+				input(type="text")
+				button(type="submit") Buscar
+			.tv-shows
+				.loader
+		footer#app-footer
+			p Encuentra tus series de televisión favoritas
+	script(src="https://code.jquery.com/jquery-2.1.4.js")
+	script(src="index.js")
