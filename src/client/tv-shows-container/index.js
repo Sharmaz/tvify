@@ -1,3 +1,10 @@
 import $ from 'jquery'
 
-export default $('#app-body').find('.tv-shows')
+var $tvShowsContainer = $('#app-body').find('.tv-shows')
+
+$tvShowsContainer.on('click', 'button.like', function (ev) {
+	var $this = $(this);
+	$this.closest('.tv-show').toggleClass('liked')
+})
+
+export default $tvShowsContainer

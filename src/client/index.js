@@ -1,10 +1,13 @@
 import $ from 'jquery'
 import page from 'page'
-import { getShows } from 'src/client/tvmaze-api'
+import { getShows, searchShows } from 'src/client/tvmaze-api'
 import renderShows from 'src/client/render'
 import $tvShowsContainer from 'src/client/tv-shows-container'
+import 'src/client/search-form'
+import qs from 'qs'
 
 page('/', function (ctx, next) {
+	$tvShowsContainer.find('.tv-show').remove()
 	if (!localStorage.shows) {
 		getShows(function (shows) {
 			$tvShowsContainer.find('.loader').remove()
@@ -15,6 +18,23 @@ page('/', function (ctx, next) {
  	else {
      renderShows(JSON.parse(localStorage.shows))
 	}
+})
+
+page('/search', function(ctx, next) {
+	$tvShowsContainer.find('.tv-show').remove()
+	var $loader = $('<div class="loader">')
+	
+	$loader.appendTo($tvShowsContainer)
+	const busqueda = qs.parse(ctx.querystring)
+	
+	searchShows(busqueda, function (res) {
+		$loader.remove()
+		var shows = res.map(function (el) {
+			return el.show
+		})
+
+		renderShows(shows)
+	})
 })
 
 page()

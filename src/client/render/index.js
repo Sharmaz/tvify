@@ -6,7 +6,7 @@ var template = `<article class="tv-show">
 				<img src=":img:" alt=":img alt:"> 
 				</div> <div class="right info"> 
 				<h1>:name:</h1> <p>:summary:</p> 
-				<button class="like"> :3 </button> 
+				<button class="like">💖</button> 
 				</div> </article>`
 
 export default function renderShows(shows) {
