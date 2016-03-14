@@ -3,6 +3,7 @@
   "description": "web app de busqueda para tv shows",
   "version": "0.1.0",
   "dependencies": {
+    "express": "^4.13.4",
     "jquery": "^2.2.1",
     "nib": "^1.1.0",
     "page": "^1.6.4",
