@@ -2,6 +2,10 @@ import express from 'express'
 var app = express()
 
 import api from 'src/server/api'
+
+import mongoose from 'mongoose'
+mongoose.connect('mongodb://localhost/tvify')
+
 app.use(express.static('public'))
 
 app.use('/api', api)
