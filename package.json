@@ -19,7 +19,7 @@
     "build-js": "NODE_PATH=. browserify -t [ babelify --presets [ es2015 ] ] src/client/index.js > public/app.js",
     "stylus": "stylus --use nib --watch src/client/lib/style.styl --out public/style.css",
     "jade": "jade --watch --pretty src/client/lib/index.jade --out public",
-    "serve": "babel-node src/server --presets es2015",
+    "serve": "NODE_PATH=. babel-node src/server --presets es2015",
     "start": "npm run build-js && npm run serve"
   }
 }

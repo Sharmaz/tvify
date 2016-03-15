@@ -11548,7 +11548,7 @@ var $tvShowsContainer = (0, _jquery2.default)('#app-body').find('.tv-shows');
 $tvShowsContainer.on('click', 'button.like', function (ev) {
 	var $this = (0, _jquery2.default)(this);
 	var id = $this.data('id'); //data-id
-	_jquery2.default.post('/vote/' + id, function () {
+	_jquery2.default.post('/api/vote/' + id, function () {
 		$this.closest('.tv-show').toggleClass('liked');
 	});
 });
