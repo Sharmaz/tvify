@@ -11497,12 +11497,13 @@ var _tvShowsContainer2 = _interopRequireDefault(_tvShowsContainer);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var template = '<article class="tv-show">  \n\t\t\t\t<div class="left img-container">  \n\t\t\t\t<img src=":img:" alt=":img alt:"> \n\t\t\t\t</div> <div class="right info"> \n\t\t\t\t<h1>:name:</h1> <p>:summary:</p> \n\t\t\t\t<button data-id=:id: class="like">💖</button> \n\t\t\t\t</div> </article>';
+var template = '<article data-id=:id: class="tv-show">  \n\t\t\t\t<div class="left img-container">  \n\t\t\t\t<img src=":img:" alt=":img alt:"> \n\t\t\t\t</div> <div class="right info"> \n\t\t\t\t<h1>:name:</h1> <p>:summary:</p> \n\t\t\t\t<button class="like">💖</button>\n\t\t\t\t<span class="count">:count:</span>\n\t\t\t\t</div> </article>';
 
 function renderShows(shows) {
 	_tvShowsContainer2.default.find('.loader').remove();
 	shows.forEach(function (show) {
-		var article = template.replace(':name:', show.name).replace(':img:', show.image ? show.image.medium : '').replace(':summary:', show.summary).replace(':img alt:', show.name + " Logo").replace(':id:', show.id);
+		//debugger
+		var article = template.replace(':name:', show.name).replace(':img:', show.image ? show.image.medium : '').replace(':summary:', show.summary).replace(':img alt:', show.name + " Logo").replace(':id:', show.id).replace(':count:', show.count);
 
 		var $article = (0, _jquery2.default)(article);
 		_tvShowsContainer2.default.append($article.fadeIn(1500));
@@ -11547,9 +11548,10 @@ var $tvShowsContainer = (0, _jquery2.default)('#app-body').find('.tv-shows');
 
 $tvShowsContainer.on('click', 'button.like', function (ev) {
 	var $this = (0, _jquery2.default)(this);
-	var id = $this.data('id'); //data-id
+	var $article = $this.closest('.tv-show');
+	var id = $article.data('id'); //data-id
 	_jquery2.default.post('/api/vote/' + id, function () {
-		$this.closest('.tv-show').toggleClass('liked');
+		$article.toggleClass('liked');
 	});
 });
 
@@ -11573,7 +11575,16 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function getShows(fn) {
 	_jquery2.default.ajax('http://api.tvmaze.com/shows', {
 		success: function success(shows, textStatus, xhr) {
-			fn(shows);
+			_jquery2.default.get('/api/votes', function (votes) {
+				shows = shows.map(function (show) {
+					var vote = votes.filter(function (vote) {
+						return vote.showId === show.id;
+					})[0];
+					show.count = vote ? vote.count : 0;
+					return show;
+				});
+				fn(shows);
+			});
 		}
 	});
 }
