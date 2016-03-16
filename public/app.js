@@ -11449,15 +11449,16 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 (0, _page2.default)('/', function (ctx, next) {
 	_tvShowsContainer2.default.find('.tv-show').remove();
-	if (!localStorage.shows) {
-		(0, _tvmazeApi.getShows)(function (shows) {
-			_tvShowsContainer2.default.find('.loader').remove();
-			localStorage.shows = JSON.stringify(shows);
-			(0, _render2.default)(shows);
-		});
-	} else {
-		(0, _render2.default)(JSON.parse(localStorage.shows));
-	}
+	// if (!localStorage.shows) {
+	(0, _tvmazeApi.getShows)(function (shows) {
+		_tvShowsContainer2.default.find('.loader').remove();
+		localStorage.shows = JSON.stringify(shows);
+		(0, _render2.default)(shows);
+	});
+	//     }
+	// 	else {
+	//     renderShows(JSON.parse(localStorage.shows))
+	// }
 });
 
 (0, _page2.default)('/search', function (ctx, next) {
@@ -11551,6 +11552,11 @@ $tvShowsContainer.on('click', 'button.like', function (ev) {
 	var $article = $this.closest('.tv-show');
 	var id = $article.data('id'); //data-id
 	_jquery2.default.post('/api/vote/' + id, function () {
+		var counter = $this.closest('article').find('.count');
+		var content = counter.html();
+		var count = Number(content);
+		count = count + 1;
+		counter.html(count);
 		$article.toggleClass('liked');
 	});
 });
