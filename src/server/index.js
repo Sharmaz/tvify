@@ -1,15 +1,14 @@
 import express from 'express'
-var app = express()
-
 import api from 'src/server/api'
-
 import mongoose from 'mongoose'
-mongoose.connect('mongodb://localhost/tvify')
+
+const app = express()
+const port = process.env.PORT || 3000
+
+mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/tvify')
 
 app.use(express.static('public'))
 
 app.use('/api', api)
 
-app.listen(3000, () => {
-	console.log('Servidor iniciado. Escuchando en el puerto 3000')
-})
+app.listen(port, () => console.log(`Servidor iniciado. Escuchando en el puerto ${port}`))

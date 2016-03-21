@@ -7,34 +7,28 @@ import 'src/client/search-form'
 import qs from 'qs'
 
 page('/', function (ctx, next) {
-	$tvShowsContainer.find('.tv-show').remove()
-	// if (!localStorage.shows) {
-		getShows(function (shows) {
-			$tvShowsContainer.find('.loader').remove()
-         	localStorage.shows = JSON.stringify(shows)
-        	renderShows(shows)
-		})
- //     }
- // 	else {
- //     renderShows(JSON.parse(localStorage.shows))
-	// }
+  $tvShowsContainer.find('.tv-show').remove()
+
+  getShows(function (shows) {
+    $tvShowsContainer.find('.loader').remove()
+    renderShows(shows)
+  })
 })
 
-page('/search', function(ctx, next) {
-	$tvShowsContainer.find('.tv-show').remove()
-	var $loader = $('<div class="loader">')
-	
-	$loader.appendTo($tvShowsContainer)
-	const busqueda = qs.parse(ctx.querystring)
-	
-	searchShows(busqueda, function (res) {
-		$loader.remove()
-		var shows = res.map(function (el) {
-			return el.show
-		})
+page('/search', function (ctx, next) {
+  $tvShowsContainer.find('.tv-show').remove()
+  var $loader = $('<div class="loader">')
 
-		renderShows(shows)
-	})
+  $loader.appendTo($tvShowsContainer)
+  const busqueda = qs.parse(ctx.querystring)
+
+  searchShows(busqueda, function (res) {
+    $loader.remove()
+    var shows = res.map(function (el) {
+      return el.show
+    })
+    renderShows(shows)
+  })
 })
 
 page()
