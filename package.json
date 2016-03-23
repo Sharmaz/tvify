@@ -10,7 +10,8 @@
     "mongoose": "^4.4.8",
     "nib": "^1.1.0",
     "page": "^1.6.4",
-    "qs": "^6.1.0"
+    "qs": "^6.1.0",
+    "tv-maze": "^1.1.0"
   },
   "devDependencies": {
     "babel-cli": "^6.6.5",
