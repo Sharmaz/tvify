@@ -47,6 +47,24 @@ router.get('/shows', function (req, res) {
   });
 });
 
+router.get('/search', function (req, res) {
+  var query = req.query.q;
+
+  client.search(query, function (err, shows) {
+    if (err) {
+      return res.sendStatus(500).json(err);
+    }
+
+    shows = shows.map(function (show) {
+      return show.show;
+    });
+
+    addVotes(shows, function (shows) {
+      res.json(shows);
+    });
+  });
+});
+
 // GET api/votes
 router.get('/votes', function (req, res) {
   _models2.default.find({}, function (err, docs) {

@@ -29,6 +29,22 @@ router.get('/shows', (req, res) => {
   })
 })
 
+router.get('/search', (req, res) => {
+  let query = req.query.q
+
+  client.search(query, (err, shows) => {
+    if (err) {
+      return res.sendStatus(500).json(err)
+    }
+
+    shows = shows.map((show) => show.show)
+
+    addVotes(shows, (shows) => {
+      res.json(shows)
+    })
+  })
+})
+
 // GET api/votes
 router.get('/votes', (req, res) => {
   Vote.find({}, (err, docs) => {

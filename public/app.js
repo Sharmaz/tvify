@@ -11463,11 +11463,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   $loader.appendTo(_tvShowsContainer2.default);
   var busqueda = _qs2.default.parse(ctx.querystring);
 
-  (0, _tvmazeApi.searchShows)(busqueda, function (res) {
+  (0, _tvmazeApi.searchShows)(busqueda, function (shows) {
     $loader.remove();
-    var shows = res.map(function (el) {
-      return el.show;
-    });
     (0, _render2.default)(shows);
   });
 });
@@ -11582,10 +11579,10 @@ function getShows(fn) {
 }
 
 function searchShows(busqueda, fn) {
-  _jquery2.default.ajax('http://api.tvmaze.com/search/shows', {
+  _jquery2.default.ajax('/api/search', {
     data: busqueda,
-    success: function success(res, textStatus, xhr) {
-      fn(res);
+    success: function success(shows, textStatus, xhr) {
+      fn(shows);
     }
   });
 }
