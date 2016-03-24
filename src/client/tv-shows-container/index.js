@@ -1,4 +1,11 @@
 import $ from 'jquery'
+import socketio from 'socket.io-client'
+
+let socket = socketio()
+socket.emit('ping')
+socket.on('pong', function () {
+  console.log('PONG')
+})
 
 var $tvShowsContainer = $('#app-body').find('.tv-shows')
 

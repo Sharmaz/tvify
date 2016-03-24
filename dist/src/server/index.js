@@ -1,8 +1,16 @@
 'use strict';
 
+var _http = require('http');
+
+var _http2 = _interopRequireDefault(_http);
+
 var _express = require('express');
 
 var _express2 = _interopRequireDefault(_express);
+
+var _socket = require('socket.io');
+
+var _socket2 = _interopRequireDefault(_socket);
 
 var _api = require('src/server/api');
 
@@ -15,6 +23,8 @@ var _mongoose2 = _interopRequireDefault(_mongoose);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var app = (0, _express2.default)();
+var server = _http2.default.createServer(app);
+var io = (0, _socket2.default)(server);
 var port = process.env.PORT || 3000;
 
 _mongoose2.default.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/tvify');
@@ -23,6 +33,14 @@ app.use(_express2.default.static('public'));
 
 app.use('/api', _api2.default);
 
-app.listen(port, function () {
+io.on('connection', function (socket) {
+  console.log('Connecte ' + socket.id);
+
+  socket.on('ping', function () {
+    return socket.emit('pong');
+  });
+});
+
+server.listen(port, function () {
   return console.log('Servidor iniciado. Escuchando en el puerto ' + port);
 });
