@@ -20,6 +20,8 @@ var _mongoose = require('mongoose');
 
 var _mongoose2 = _interopRequireDefault(_mongoose);
 
+var _lib = require('src/server/lib');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var app = (0, _express2.default)();
@@ -36,8 +38,12 @@ app.use('/api', _api2.default);
 io.on('connection', function (socket) {
   console.log('Connecte ' + socket.id);
 
-  socket.on('ping', function () {
-    return socket.emit('pong');
+  socket.on('vote', function (id) {
+    (0, _lib.incrementVote)(id, function (err, vote) {
+      if (err) return socket.emit('vote:error', err);
+
+      socket.emit('vote:done', vote);
+    });
   });
 });
 

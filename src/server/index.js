@@ -3,6 +3,7 @@ import express from 'express'
 import socketio from 'socket.io'
 import api from 'src/server/api'
 import mongoose from 'mongoose'
+import { incrementVote } from 'src/server/lib'
 
 const app = express()
 const server = http.createServer(app)
@@ -18,7 +19,13 @@ app.use('/api', api)
 io.on('connection', (socket) => {
   console.log(`Connecte ${socket.id}`)
 
-  socket.on('ping', () => socket.emit('pong'))
+  socket.on('vote', (id) => {
+    incrementVote(id, (err, vote) => {
+      if (err) return socket.emit('vote:error', err)
+
+      socket.emit('vote:done', vote)
+    })
+  })
 })
 
 server.listen(port, () => console.log(`Servidor iniciado. Escuchando en el puerto ${port}`))
