@@ -42,7 +42,7 @@ io.on('connection', function (socket) {
     (0, _lib.incrementVote)(id, function (err, vote) {
       if (err) return socket.emit('vote:error', err);
 
-      socket.emit('vote:done', vote);
+      io.sockets.emit('vote:done', vote);
     });
   });
 });
