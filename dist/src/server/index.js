@@ -45,6 +45,9 @@ io.on('connection', function (socket) {
       io.sockets.emit('vote:done', vote);
     });
   });
+  socket.on('message', function (msg) {
+    socket.broadcast.emit('message', msg);
+  });
 });
 
 server.listen(port, function () {

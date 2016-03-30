@@ -18851,12 +18851,39 @@ $tvShowsContainer.on('keypress', '.chat-nick', function (ev) {
   $chatInput.prop('disabled', $this.val().length === 0);
 });
 
+$tvShowsContainer.on('keypress', '.chat-input', function (ev) {
+  var $this = (0, _jquery2.default)(this);
+  var nick = (0, _jquery2.default)('.chat-nick').val();
+
+  if (ev.which === 13) {
+    var message = $this.val();
+
+    socket.emit('message', { nick: nick, message: message });
+    addMessage(nick, message);
+
+    $this.val('');
+  }
+});
+
 socket.on('vote:done', function (vote) {
   var id = vote.showId;
   var $article = $tvShowsContainer.find('article[data-id=' + id + ']');
   var counter = $article.find('.count');
   counter.html(vote.count);
 });
+
+socket.on('message', function (msg) {
+  var nick = msg.nick;
+  var message = msg.message;
+
+
+  addMessage(nick, message);
+});
+
+function addMessage(nick, message) {
+  var $chatBody = (0, _jquery2.default)('.chat-body');
+  $chatBody.append('<p><b>' + nick + ':</b> ' + message + '</p>');
+}
 exports.default = $tvShowsContainer;
 
 },{"jquery":3,"page":4,"socket.io-client":11}],62:[function(require,module,exports){
