@@ -9,7 +9,7 @@ router.get('/show/:id', (req, res) => {
   let id = req.params.id
 
   client.show(id, (err, show) => {
-    ir (err) {
+    if (err) {
       return res.sendStatus(500).json(err)
     }
     res.json(show)

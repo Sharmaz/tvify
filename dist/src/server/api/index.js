@@ -19,6 +19,17 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var router = _express2.default.Router();
 var client = _tvMaze2.default.createClient();
 
+router.get('/show/:id', function (req, res) {
+  var id = req.params.id;
+
+  client.show(id, function (err, show) {
+    if (err) {
+      return res.sendStatus(500).json(err);
+    }
+    res.json(show);
+  });
+});
+
 // GET /api/shows
 router.get('/shows', function (req, res) {
   client.shows(function (err, shows) {

@@ -18688,8 +18688,6 @@ var _tvmazeApi = require('src/client/tvmaze-api');
 
 var _render = require('src/client/render');
 
-var _render2 = _interopRequireDefault(_render);
-
 var _tvShowsContainer = require('src/client/tv-shows-container');
 
 var _tvShowsContainer2 = _interopRequireDefault(_tvShowsContainer);
@@ -18707,7 +18705,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
   (0, _tvmazeApi.getShows)(function (shows) {
     _tvShowsContainer2.default.find('.loader').remove();
-    (0, _render2.default)(shows);
+    (0, _render.renderShows)(shows);
   });
 });
 
@@ -18720,9 +18718,20 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
   (0, _tvmazeApi.searchShows)(busqueda, function (shows) {
     $loader.remove();
-    (0, _render2.default)(shows);
+    (0, _render.renderShows)(shows);
   });
 });
+
+(0, _page2.default)('/chat/:showId', function (ctx, next) {
+  _tvShowsContainer2.default.find('.tv-show').remove();
+  (0, _render.renderChat)(ctx.params.showId);
+});
+
+var productionEnv = !! ~window.location.host.indexOf('github.io');
+
+if (productionEnv) {
+  _page2.default.base('/tvify');
+}
 
 (0, _page2.default)();
 
@@ -18732,7 +18741,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = renderShows;
+exports.renderShows = renderShows;
+exports.renderChat = renderChat;
 
 var _jquery = require('jquery');
 
@@ -18746,6 +18756,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var template = '<article data-id=:id: class="tv-show"> <div class="left img-container"> <img src=":img:" alt=":img alt:"> </div> <div class="right info"> <h1>:name:</h1> <p>:summary:</p> <button class="like">💖</button><span class="count">:count:</span><button class="chat">💬</button></div> </article>';
 
+var chatTemplate = '<article data-id=:id: class="chat-container"><div class="left img-container"><img src=":img:" alt=":img alt:"></div><div class="right chat-window"><h1>:name:</h1><div class="chat-body"></div><input type="text" name="nickname" class="chat-nick" placeholder="Enter your nickname..." /><input type="text" name="message" class="chat-input" disabled /></div></article>';
+
 function renderShows(shows) {
   _tvShowsContainer2.default.find('.loader').remove();
 
@@ -18755,6 +18767,17 @@ function renderShows(shows) {
 
     var $article = (0, _jquery2.default)(article);
     _tvShowsContainer2.default.append($article.fadeIn(1500));
+  });
+}
+
+function renderChat(id) {
+  _jquery2.default.ajax('/api/show/' + id, {
+    success: function success(show, textStatus, xhr) {
+      var chat = chatTemplate.replace(':id:', id).replace(':name:', show.name).replace(':img:', show.image ? show.image.medium : '').replace(':img alt:', show.name + ' Logo');
+
+      var $chat = (0, _jquery2.default)(chat);
+      _tvShowsContainer2.default.append($chat.fadeIn(1000));
+    }
   });
 }
 
@@ -18790,6 +18813,10 @@ var _jquery = require('jquery');
 
 var _jquery2 = _interopRequireDefault(_jquery);
 
+var _page = require('page');
+
+var _page2 = _interopRequireDefault(_page);
+
 var _socket = require('socket.io-client');
 
 var _socket2 = _interopRequireDefault(_socket);
@@ -18809,6 +18836,21 @@ $tvShowsContainer.on('click', 'button.like', function (ev) {
   $article.toggleClass('liked');
 });
 
+$tvShowsContainer.on('click', 'button.chat', function (ev) {
+  var $this = (0, _jquery2.default)(this);
+  var $article = $this.closest('.tv-show');
+  var id = $article.data('id');
+
+  (0, _page2.default)('/chat/' + id);
+});
+
+$tvShowsContainer.on('keypress', '.chat-nick', function (ev) {
+  var $this = (0, _jquery2.default)(this);
+  var $chatInput = (0, _jquery2.default)('.chat-input');
+
+  $chatInput.prop('disabled', $this.val().length === 0);
+});
+
 socket.on('vote:done', function (vote) {
   var id = vote.showId;
   var $article = $tvShowsContainer.find('article[data-id=' + id + ']');
@@ -18817,7 +18859,7 @@ socket.on('vote:done', function (vote) {
 });
 exports.default = $tvShowsContainer;
 
-},{"jquery":3,"socket.io-client":11}],62:[function(require,module,exports){
+},{"jquery":3,"page":4,"socket.io-client":11}],62:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
