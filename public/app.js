@@ -18884,6 +18884,7 @@ socket.on('message', function (msg) {
 function addMessage(nick, message) {
   var $chatBody = (0, _jquery2.default)('.chat-body');
   $chatBody.append('<p><b>' + nick + ':</b> ' + message + '</p>');
+  $chatBody.animate({ scrollTop: $chatBody.get(0).scrollHeight }, 1000);
 }
 exports.default = $tvShowsContainer;
 
