@@ -45,8 +45,14 @@ io.on('connection', function (socket) {
       io.sockets.emit('vote:done', vote);
     });
   });
+
+  socket.on('join', function (room) {
+    socket.room = room;
+    socket.join(room);
+  });
+
   socket.on('message', function (msg) {
-    socket.broadcast.emit('message', msg);
+    socket.broadcast.to(socket.room).emit('message', msg);
   });
 });
 

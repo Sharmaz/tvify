@@ -26,8 +26,14 @@ io.on('connection', (socket) => {
       io.sockets.emit('vote:done', vote)
     })
   })
+
+  socket.on('join', (room) => {
+    socket.room = room
+    socket.join(room)
+  })
+
   socket.on('message', (msg) => {
-    socket.broadcast.emit('message', msg)
+    socket.broadcast.to(socket.room).emit('message', msg)
   })
 })
 

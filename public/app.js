@@ -18841,6 +18841,7 @@ $tvShowsContainer.on('click', 'button.chat', function (ev) {
   var $article = $this.closest('.tv-show');
   var id = $article.data('id');
 
+  socket.emit('join', 'show-' + id);
   (0, _page2.default)('/chat/' + id);
 });
 
