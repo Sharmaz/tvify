@@ -25,6 +25,8 @@ var _lib = require('src/server/lib');
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var app = (0, _express2.default)();
+// import redis from 'socket.io-redis'
+
 var server = _http2.default.createServer(app);
 var io = (0, _socket2.default)(server);
 var port = process.env.PORT || 3000;
@@ -34,6 +36,8 @@ _mongoose2.default.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/tvif
 app.use(_express2.default.static('public'));
 
 app.use('/api', _api2.default);
+
+// io.adapter(redis({ host: 'localhost', port: 6379 }))
 
 io.on('connection', function (socket) {
   console.log('Connecte ' + socket.id);

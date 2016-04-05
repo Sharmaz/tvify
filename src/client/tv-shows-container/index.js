@@ -1,5 +1,6 @@
 import $ from 'jquery'
 import page from 'page'
+import xss from 'xss'
 import socketio from 'socket.io-client'
 
 let socket = socketio()
@@ -60,7 +61,7 @@ socket.on('message', function (msg) {
 
 function addMessage (nick, message) {
   let $chatBody = $('.chat-body')
-  $chatBody.append(`<p><b>${nick}:</b> ${message}</p>`)
+  $chatBody.append(`<p><b>${xss(nick)}:</b> ${xss(message)}</p>`)
   $chatBody.animate({ scrollTop: $chatBody.get(0).scrollHeight }, 1000)
 }
 export default $tvShowsContainer
